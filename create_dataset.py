@@ -22,7 +22,7 @@ class FileTypes(enum.Enum):
     MASK = 4  # The foreground mask
     AGE = 5  # The age
     GPA = 6  # The GPA
-    SEX = 7  # The sex
+    GENDER = 7  # The gender
 
 
 class LoadData(file_load.Load):
@@ -37,7 +37,7 @@ class LoadData(file_load.Load):
             with open(file_name, 'r') as f:
                 value = np.asarray([float(f.readlines()[1].split(':')[1].strip())])
                 return value, None
-        if id_ == FileTypes.SEX.name:
+        if id_ == FileTypes.GENDER.name:
             with open(file_name, 'r') as f:
                 value = np.array(f.readlines()[2].split(':')[1].strip())
                 return value, None
@@ -59,7 +59,7 @@ class Subject(data.SubjectFile):
                          labels={FileTypes.GT.name: files[FileTypes.GT]},
                          mask={FileTypes.MASK.name: files[FileTypes.MASK]},
                          numerical={FileTypes.AGE.name: files[FileTypes.AGE], FileTypes.GPA.name: files[FileTypes.GPA]},
-                         sex={FileTypes.SEX.name: files[FileTypes.SEX]})
+                         gender={FileTypes.GENDER.name: files[FileTypes.GENDER]})
         self.subject_path = files.get(subject, '')
 
 
@@ -97,7 +97,7 @@ def get_subject_files(data_dir: str) -> typing.List[Subject]:
     subject_dirs = [subject_dir for subject_dir in glob.glob(os.path.join(data_dir, '*')) if os.path.isdir(subject_dir)]
     sorted(subject_dirs)
 
-    keys = [FileTypes.T1, FileTypes.T2, FileTypes.GT, FileTypes.MASK, FileTypes.AGE, FileTypes.GPA, FileTypes.SEX]
+    keys = [FileTypes.T1, FileTypes.T2, FileTypes.GT, FileTypes.MASK, FileTypes.AGE, FileTypes.GPA, FileTypes.GENDER]
     subjects = []
     # for each subject on file system, initialize a Subject object
     for subject_dir in subject_dirs:
@@ -130,7 +130,7 @@ def get_full_file_path(id_: str, root_dir: str, file_key) -> str:
         file_name = f'{id_}_GT.mha'
     elif file_key == FileTypes.MASK:
         file_name = f'{id_}_MASK.nii.gz'
-    elif file_key == FileTypes.AGE or file_key == FileTypes.GPA or file_key == FileTypes.SEX:
+    elif file_key == FileTypes.AGE or file_key == FileTypes.GPA or file_key == FileTypes.GENDER:
         file_name = f'{id_}_demographic.txt'
     else:
         raise ValueError('Unknown key')

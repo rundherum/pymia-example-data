@@ -1,3 +1,3 @@
 Age: 37
 GPA: 1.2480040714166454
-Sex: M
+Gender: M

@@ -15,12 +15,12 @@ def main(hdf_file: str):
                                        extr.DataExtractor(),
                                        extr.SelectiveDataExtractor(),
                                        extr.DataExtractor(('numerical', ), ignore_indexing=True),
-                                       extr.DataExtractor(('sex', ), ignore_indexing=True),
+                                       extr.DataExtractor(('gender', ), ignore_indexing=True),
                                        extr.DataExtractor(('mask', ), ignore_indexing=False),
                                        extr.SubjectExtractor(),
                                        extr.FilesExtractor(categories=(defs.KEY_IMAGES,
                                                                        defs.KEY_LABELS,
-                                                                       'mask', 'numerical', 'sex')),
+                                                                       'mask', 'numerical', 'gender')),
                                        extr.IndexingExtractor(),
                                        extr.ImagePropertiesExtractor()])
     dataset = extr.PymiaDatasource(hdf_file, extr.SliceIndexing(), extractor)
@@ -70,10 +70,10 @@ def main(hdf_file: str):
             if age != item['numerical'][0][0] or gpa != item['numerical'][0][1]:
                 raise ValueError('value not equal')
 
-        for file in item[defs.KEY_PLACEHOLDER_FILES.format('sex')]:
+        for file in item[defs.KEY_PLACEHOLDER_FILES.format('gender')]:
             with open(os.path.join(root, file), 'r') as f:
-                sex = f.readlines()[2].split(':')[1].strip()
-            if sex != str(item['sex'][0]):
+                gender = f.readlines()[2].split(':')[1].strip()
+            if gender != str(item['gender'][0]):
                 raise ValueError('value not equal')
 
     print('All test passed!')
